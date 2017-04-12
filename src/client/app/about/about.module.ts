@@ -1,12 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about.component';
-import { Ng2StateDeclaration, UIRouterModule } from 'ui-router-ng2';
+import { UIRouterModule } from 'sn-ui-router-ng2';
+import { uiRouterConfigFn } from '../router.config';
 
-export let CHILD_STATES: Ng2StateDeclaration[] = [{name: 'app.about', url: '/about', component: AboutComponent}];
+export let CHILD_STATES = [
+    {
+        name: 'app.about',
+        url: '/about',
+        views: {
+            'secondary': {
+                component: AboutComponent
+            }
+        }
+    }
+];
 
 @NgModule({
-    imports: [CommonModule, UIRouterModule.forChild({states: CHILD_STATES})],
+    imports: [
+        CommonModule,
+        UIRouterModule.forChild({
+            states: CHILD_STATES,
+            config: uiRouterConfigFn
+        })],
     declarations: [AboutComponent],
     exports: [AboutComponent]
 })

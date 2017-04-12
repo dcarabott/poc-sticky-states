@@ -1,17 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home.component';
-import { Ng2StateDeclaration, UIRouterModule } from 'ui-router-ng2';
+import { UIRouterModule } from 'sn-ui-router-ng2';
+import { uiRouterConfigFn } from '../router.config';
 
-
-export let CHILD_STATES: Ng2StateDeclaration[] = [
-    {name: 'app.home', url: '/', component: HomeComponent}
+export let CHILD_STATES = [
+    {
+        name: 'app.home',
+        url: '/',
+        sticky: true,
+        views: {
+            'main': {
+                component: HomeComponent
+            }
+        }
+    }
 ];
 
 @NgModule({
     imports: [CommonModule,
         UIRouterModule.forChild({
-            states: CHILD_STATES
+            states: CHILD_STATES,
+            config: uiRouterConfigFn
         })
     ],
     declarations: [HomeComponent],
