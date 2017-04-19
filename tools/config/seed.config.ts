@@ -387,9 +387,10 @@ export class SeedConfig {
             '@angular/http/testing': 'node_modules/@angular/http/bundles/http-testing.umd.js',
             '@angular/platform-browser/testing': 'node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
             '@angular/platform-browser-dynamic/testing': 'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
-            'ui-router-core': 'node_modules/ui-router-core/lib/index.js',
-            'sn-ui-router-ng2': 'node_modules/sn-ui-router-ng2/_bundles/ui-router-ng2.js',
-            'sn-ui-router-sticky-states': 'node_modules/sn-ui-router-sticky-states/lib/stickyStates.js',
+
+            'sn-ui-router-sticky-states': 'node_modules/sn-ui-router-sticky-states/lib/index.js',
+            'sn-2-ui-router-ng2': 'node_modules/sn-2-ui-router-ng2/_bundles/ui-router-ng2.js',
+            'sn-ui-router-core': 'node_modules/sn-ui-router-core/lib/index.js',
             'app/*': '/app/*',
             // For test config
             'dist/dev/*': '/base/dist/dev/*',
@@ -420,6 +421,13 @@ export class SeedConfig {
             // Note that for multiple apps this configuration need to be updated
             // You will have to include entries for each individual application in
             // `src/client`.
+
+
+            'sn-ui-router-sticky-states': 'node_modules/sn-ui-router-sticky-states/lib/index.js',
+            'sn-2-ui-router-ng2': 'node_modules/sn-2-ui-router-ng2/_bundles/ui-router-ng2.js',
+            'sn-ui-router-core': 'node_modules/sn-ui-router-core/lib/index.js',
+
+
             [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
             'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
             'node_modules/*': 'node_modules/*',

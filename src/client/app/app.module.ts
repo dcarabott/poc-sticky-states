@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AboutModule } from './about/about.module';
 import { HomeModule } from './home/home.module';
-import { Category, Ng2StateDeclaration, trace, UIRouterModule, UIView } from 'sn-ui-router-ng2';
+import { Category, Ng2StateDeclaration, trace, UIRouterModule, UIView } from 'sn-2-ui-router-ng2';
 import { uiRouterConfigFn } from './router.config';
 
 export let MAIN_STATES: Ng2StateDeclaration[] = [{
@@ -13,7 +13,6 @@ export let MAIN_STATES: Ng2StateDeclaration[] = [{
     component: AppComponent,
     abstract: true
 }];
-
 
 trace.enable(Category.TRANSITION, Category.VIEWCONFIG, Category.HOOK, Category.UIVIEW, Category.RESOLVE);
 
@@ -28,7 +27,6 @@ trace.enable(Category.TRANSITION, Category.VIEWCONFIG, Category.HOOK, Category.U
     ],
     declarations: [AppComponent],
     bootstrap: [UIView]
-
 })
 export class AppModule {
 }

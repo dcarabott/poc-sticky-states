@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about.component';
-import { UIRouterModule } from 'sn-ui-router-ng2';
+import { UIRouterModule } from 'sn-2-ui-router-ng2';
 import { uiRouterConfigFn } from '../router.config';
 
 export let CHILD_STATES = [
     {
         name: 'app.about',
         url: '/about',
+        sticky: true,
         views: {
             'secondary': {
                 component: AboutComponent
