@@ -10,7 +10,7 @@ export = (done: any) => {
     runtime: false,
     sourceMaps: true,
     sourceMapContents: true,
-    minify: true,
+    minify: false,
     mangle: false
   };
   var builder = new Builder('./');

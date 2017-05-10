@@ -4,10 +4,10 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AboutModule } from './about/about.module';
 import { HomeModule } from './home/home.module';
-import { Category, Ng2StateDeclaration, trace, UIRouterModule, UIView } from 'sn-2-ui-router-ng2';
+import { Category, trace, UIRouterModule, UIView } from '@uirouter/angular';
 import { uiRouterConfigFn } from './router.config';
 
-export let MAIN_STATES: Ng2StateDeclaration[] = [{
+export let MAIN_STATES = [{
     name: 'app',
     url: '',
     component: AppComponent,

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AboutComponent } from './about.component';
-import { UIRouterModule } from 'sn-2-ui-router-ng2';
+import { UIRouterModule } from '@uirouter/angular';
 import { uiRouterConfigFn } from '../router.config';
 
 export let CHILD_STATES = [
@@ -23,7 +23,8 @@ export let CHILD_STATES = [
         UIRouterModule.forChild({
             states: CHILD_STATES,
             config: uiRouterConfigFn
-        })],
+        })
+    ],
     declarations: [AboutComponent],
     exports: [AboutComponent]
 })

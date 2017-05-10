@@ -1,4 +1,4 @@
-import { UIRouter } from 'sn-ui-router-core';
+import { UIRouter } from '@uirouter/angular';
 import { StickyStatesPlugin } from 'sn-ui-router-sticky-states';
 
 export function uiRouterConfigFn(router: UIRouter) {

@@ -147,6 +147,12 @@ export class SeedConfig {
     APP_TITLE = 'Welcome to angular-seed!';
 
     /**
+     * Tracking ID.
+     * @type {string}
+     */
+    GOOGLE_ANALYTICS_ID = 'UA-XXXXXXXX-X';
+
+    /**
      * The base folder of the applications source files.
      * @type {string}
      */
@@ -317,13 +323,13 @@ export class SeedConfig {
      * @type {InjectableDependency[]}
      */
     NPM_DEPENDENCIES: InjectableDependency[] = [
-        {src: 'core-js/client/shim.min.js', inject: 'shims'},
-        {src: 'zone.js/dist/zone.js', inject: 'libs'},
-        {src: 'zone.js/dist/long-stack-trace-zone.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT},
-        {src: 'intl/dist/Intl.min.js', inject: 'shims'},
-        {src: 'systemjs/dist/system.src.js', inject: 'shims', buildType: BUILD_TYPES.DEVELOPMENT},
+        { src: 'core-js/client/shim.min.js', inject: 'shims' },
+        { src: 'zone.js/dist/zone.js', inject: 'libs' },
+        { src: 'zone.js/dist/long-stack-trace-zone.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT },
+        { src: 'intl/dist/Intl.min.js', inject: 'shims' },
+        { src: 'systemjs/dist/system.src.js', inject: 'shims', buildType: BUILD_TYPES.DEVELOPMENT },
         // Temporary fix. See https://github.com/angular/angular/issues/9359
-        {src: '.tmp/Rx.min.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT},
+        { src: '.tmp/Rx.min.js', inject: 'libs', buildType: BUILD_TYPES.DEVELOPMENT },
     ];
 
     /**
@@ -333,21 +339,6 @@ export class SeedConfig {
     APP_ASSETS: InjectableDependency[] = [];
 
     /**
-     * Returns the array of injectable dependencies (the list of local files to be injected in the `index.html`).
-     * @return {InjectableDependency[]}
-     */
-    private get _APP_ASSETS(): InjectableDependency[] {
-        return [
-            {
-                src: `${this.CSS_SRC}/${this.CSS_BUNDLE_NAME}.${this.getInjectableStyleExtension()}`,
-                inject: true,
-                vendor: false
-            },
-            ...this.APP_ASSETS,
-        ];
-    }
-
-    /**
      * The list of editor temporary files to ignore in watcher and asset builder.
      * @type {string[]}
      */
@@ -355,6 +346,19 @@ export class SeedConfig {
         '**/*___jb_tmp___',
         '**/*~',
     ];
+
+    /**
+     * List of directories to include in commonjs
+     * @type {string[]}
+     */
+    ROLLUP_INCLUDE_DIR: string[] = ['node_modules/**'];
+
+    /**
+     * List of named export Object key value pairs
+     * key: dependencie file
+     * value: exported Objects
+     */
+    ROLLUP_NAMED_EXPORTS: any[] = [];
 
     /**
      * Returns the array of injectable dependencies (npm dependencies and assets).
@@ -373,6 +377,8 @@ export class SeedConfig {
         defaultJSExtensions: true,
         paths: {
             [this.BOOTSTRAP_MODULE]: `${this.APP_BASE}${this.BOOTSTRAP_MODULE}`,
+            '@angular/animations': 'node_modules/@angular/animations/bundles/animations.umd.js',
+            '@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
             '@angular/common': 'node_modules/@angular/common/bundles/common.umd.js',
             '@angular/compiler': 'node_modules/@angular/compiler/bundles/compiler.umd.js',
             '@angular/core': 'node_modules/@angular/core/bundles/core.umd.js',
@@ -380,23 +386,32 @@ export class SeedConfig {
             '@angular/http': 'node_modules/@angular/http/bundles/http.umd.js',
             '@angular/platform-browser': 'node_modules/@angular/platform-browser/bundles/platform-browser.umd.js',
             '@angular/platform-browser-dynamic': 'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+            '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
+            '@angular/animations/browser': 'node_modules/@angular/animations/bundles/animations-browser.umd.js',
 
             '@angular/common/testing': 'node_modules/@angular/common/bundles/common-testing.umd.js',
             '@angular/compiler/testing': 'node_modules/@angular/compiler/bundles/compiler-testing.umd.js',
             '@angular/core/testing': 'node_modules/@angular/core/bundles/core-testing.umd.js',
             '@angular/http/testing': 'node_modules/@angular/http/bundles/http-testing.umd.js',
-            '@angular/platform-browser/testing': 'node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
-            '@angular/platform-browser-dynamic/testing': 'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
+            '@angular/platform-browser/testing':
+                'node_modules/@angular/platform-browser/bundles/platform-browser-testing.umd.js',
+            '@angular/platform-browser-dynamic/testing':
+                'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic-testing.umd.js',
+            '@angular/router/testing': 'node_modules/@angular/router/bundles/router-testing.umd.js',
 
             'sn-ui-router-sticky-states': 'node_modules/sn-ui-router-sticky-states/lib/index.js',
-            'sn-2-ui-router-ng2': 'node_modules/sn-2-ui-router-ng2/_bundles/ui-router-ng2.js',
-            'sn-ui-router-core': 'node_modules/sn-ui-router-core/lib/index.js',
+            '@uirouter/angular': 'node_modules/@uirouter/angular/_bundles/ui-router-ng2.js',
+            '@uirouter/core': 'node_modules/@uirouter/core/lib/index.js',
+
+
+
             'app/*': '/app/*',
             // For test config
             'dist/dev/*': '/base/dist/dev/*',
             '*': 'node_modules/*'
         },
-        packages: {}
+        packages: {
+        }
     };
 
     /**
@@ -416,54 +431,64 @@ export class SeedConfig {
         packageConfigPaths: [
             join('node_modules', '*', 'package.json'),
             join('node_modules', '@angular', '*', 'package.json')
+            // for other modules like @ngx-translate the package.json path needs to updated here
+            // otherwise npm run build.prod would fail
+            // join('node_modules', '@ngx-translate', '*', 'package.json')
         ],
         paths: {
             // Note that for multiple apps this configuration need to be updated
             // You will have to include entries for each individual application in
             // `src/client`.
-
-
-            'sn-ui-router-sticky-states': 'node_modules/sn-ui-router-sticky-states/lib/index.js',
-            'sn-2-ui-router-ng2': 'node_modules/sn-2-ui-router-ng2/_bundles/ui-router-ng2.js',
-            'sn-ui-router-core': 'node_modules/sn-ui-router-core/lib/index.js',
-
-
             [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
+            '@angular/platform-browser/animations': 'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
+            '@angular/animations/browser': 'node_modules/@angular/animations/bundles/animations-browser.umd.js',
             'dist/tmp/node_modules/*': 'dist/tmp/node_modules/*',
             'node_modules/*': 'node_modules/*',
             '*': 'node_modules/*'
         },
         packages: {
+            '@angular/animations': {
+                main: 'bundles/animations.umd.js',
+                defaultExtension: 'js'
+            },
             '@angular/common': {
-                main: 'index.js',
+                main: 'bundles/common.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/compiler': {
-                main: 'index.js',
+                main: 'bundles/compiler.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/core/testing': {
-                main: 'index.js',
+                main: 'bundles/core-testing.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/core': {
-                main: 'index.js',
+                main: 'bundles/core.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/forms': {
-                main: 'index.js',
+                main: 'bundles/forms.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/http': {
-                main: 'index.js',
+                main: 'bundles/http.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/platform-browser': {
-                main: 'index.js',
+                main: 'bundles/platform-browser.umd.js',
                 defaultExtension: 'js'
             },
             '@angular/platform-browser-dynamic': {
-                main: 'index.js',
+                main: 'bundles/platform-browser-dynamic.umd.js',
+                defaultExtension: 'js'
+            },
+            '@angular/router': {
+                main: 'bundles/router.umd.js',
+                defaultExtension: 'js'
+            },
+            '@angular/service-worker': {
+                main: 'bundles/service-worker.umd.js',
                 defaultExtension: 'js'
             },
             'rxjs': {
@@ -493,7 +518,8 @@ export class SeedConfig {
      * White list for CSS color guard
      * @type {[string, string][]}
      */
-    COLOR_GUARD_WHITE_LIST: [string, string][] = [];
+    COLOR_GUARD_WHITE_LIST: [string, string][] = [
+    ];
 
     /**
      * Browser-sync middleware configurations array.
@@ -506,6 +532,24 @@ export class SeedConfig {
      * @type {any}
      */
     PLUGIN_CONFIGS: any = {};
+
+    /**
+     * Generates the query string which should be appended to the end of the URLs in dev mode.
+     */
+    QUERY_STRING_GENERATOR = () => {
+        return Date.now().toString();
+    }
+
+    /**
+     * Returns the array of injectable dependencies (the list of local files to be injected in the `index.html`).
+     * @return {InjectableDependency[]}
+     */
+    private get _APP_ASSETS(): InjectableDependency[] {
+        return [
+            { src: `${this.CSS_SRC}/${this.CSS_BUNDLE_NAME}.${this.getInjectableStyleExtension()}`, inject: true, vendor: false },
+            ...this.APP_ASSETS,
+        ];
+    }
 
     /**
      * Returns the configuration object for NPM module configurations.
@@ -580,8 +624,8 @@ export class SeedConfig {
             coverageReporter: {
                 dir: this.COVERAGE_DIR + '/',
                 reporters: [
-                    {type: 'json', subdir: '.', file: 'coverage-final.json'},
-                    {type: 'html', subdir: '.'}
+                    { type: 'json', subdir: '.', file: 'coverage-final.json' },
+                    { type: 'html', subdir: '.' }
                 ]
             },
             remapIstanbulReporter: {
@@ -590,7 +634,7 @@ export class SeedConfig {
                 }
             }
         };
-    };
+    }
 
     /**
      * Recursively merge source onto target.
@@ -638,6 +682,16 @@ export class SeedConfig {
 
     }
 
+    /**
+     * Convert named rollup array to object
+     */
+    getRollupNamedExports() {
+        let namedExports = {};
+        this.ROLLUP_NAMED_EXPORTS.map(namedExport => {
+            namedExports = Object.assign(namedExports, namedExport);
+        });
+        return namedExports;
+    }
 }
 
 /**
